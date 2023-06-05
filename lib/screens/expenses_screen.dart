@@ -91,38 +91,43 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
     Widget mainContent = ListView.builder(
       itemCount: _registeredExpenses.length,
-      itemBuilder: (ctx, index) => Dismissible(
-        key: ValueKey(_registeredExpenses[index]),
-        confirmDismiss: (direction) async {
-          return (direction == DismissDirection.endToStart);
-        },
-        secondaryBackground: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            const Icon(Icons.delete),
-            SizedBox(
-              width: displayWidth * 0.08,
-            )
-          ],
+      itemBuilder: (ctx, index) => SizedBox(
+        height: displayHeight < 600
+            ? displayHeight * 0.25
+            : displayHeight * 0.15,
+        child: Dismissible(
+          key: ValueKey(_registeredExpenses[index]),
+          confirmDismiss: (direction) async {
+            return (direction == DismissDirection.endToStart);
+          },
+          secondaryBackground: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const Icon(Icons.delete),
+              SizedBox(
+                width: displayWidth * 0.08,
+              )
+            ],
+          ),
+          background: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // Text("eddqd"),
+              SizedBox(
+                width: displayWidth * 0.08,
+              ),
+              const Icon(Icons.edit),
+            ],
+          ),
+          child: ExpenseItem(_registeredExpenses[index]),
+          onDismissed: (direction) {
+            if (direction == DismissDirection.endToStart) {
+              _removeExpense(_registeredExpenses[index]);
+            } else {
+              _openAddExpenseOverlay(_registeredExpenses[index]);
+            }
+          },
         ),
-        background: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            // Text("eddqd"),
-            SizedBox(
-              width: displayWidth * 0.08,
-            ),
-            const Icon(Icons.edit),
-          ],
-        ),
-        child: ExpenseItem(_registeredExpenses[index]),
-        onDismissed: (direction) {
-          if (direction == DismissDirection.endToStart) {
-            _removeExpense(_registeredExpenses[index]);
-          } else {
-            _openAddExpenseOverlay(_registeredExpenses[index]);
-          }
-        },
       ),
     );
 

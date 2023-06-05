@@ -21,7 +21,7 @@ class ExpenseItem extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: displayWidth * 0.05,
-          vertical: displayHeight * 0.015,
+          vertical: displayHeight * 0.02,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
