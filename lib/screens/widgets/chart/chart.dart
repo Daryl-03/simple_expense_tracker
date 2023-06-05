@@ -36,24 +36,17 @@ class _ChartState extends State<Chart> {
     final displayWidth = AppLayout.displayWidth(context);
     final displayHeight = AppLayout.displayHeightWithoutAppBar(context);
     final theme = Theme.of(context);
-    var logger = Logger(
-      printer: PrettyPrinter(
-        methodCount: 0,
-        errorMethodCount: 8,
-        lineLength: 120,
-        colors: true,
-        printEmojis: true,
-        printTime: false,
-      ),
-    );
 
-    for (var bucket in widget.expenseBuckets) {
-      logger.i(bucket.totalAmount / widget.maxAmount);
-    }
 
     return Container(
-      width: displayWidth * 0.9,
-      height: displayHeight * 0.34,
+      // width: displayWidth * 0.9,
+      margin: EdgeInsets.symmetric(
+        horizontal: displayWidth * 0.02,
+        vertical: displayHeight * 0.02,
+      ),
+      height: displayHeight > 600
+          ? displayHeight * 0.4
+          : displayHeight * 0.7,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -83,36 +76,40 @@ class _ChartState extends State<Chart> {
       // child: Center(child: Text("Chart")),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: displayHeight * 0.02,
+          vertical: displayHeight * 0.01,
         ),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            for (var bucket in widget.expenseBuckets)
-              Column(
-                children: [
-                  // Container(
-                  //   color: Colors.blue,
-                  //   child: Text("cd"),
-                  // ),
-                  SizedBox(
-                    width: displayWidth * 0.15,
-                    height: displayHeight * 0.25,
-                    child: ChartBar(
-                      fill: bucket.totalAmount / widget.maxAmount,
-                    ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                for (var bucket in widget.expenseBuckets)
+                  Column(
+                    children: [
+                      // Container(
+                      //   color: Colors.blue,
+                      //   child: Text("cd"),
+                      // ),
+                      SizedBox(
+                        width: constraints.maxWidth * 0.15,
+                        height: constraints.maxHeight * 0.85,
+                        child: ChartBar(
+                          fill: bucket.totalAmount / widget.maxAmount,
+                        ),
+                      ),
+                      SizedBox(
+                        height: constraints.maxHeight * 0.03,
+                      ),
+                      Icon(
+                        categoryIcons[bucket.category],
+                        color: theme.colorScheme.onPrimaryContainer,
+                      )
+                    ],
                   ),
-                  SizedBox(
-                    height: displayHeight * 0.01,
-                  ),
-                  Icon(
-                    categoryIcons[bucket.category],
-                    color: theme.colorScheme.onPrimaryContainer,
-                  )
-                ],
-              ),
-          ],
+              ],
+            );
+          }
         ),
       ),
     );

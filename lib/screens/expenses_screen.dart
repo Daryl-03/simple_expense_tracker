@@ -75,6 +75,8 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
           addExpense: _addEditExpense,
         );
       },
+      isScrollControlled: true,
+      useSafeArea: true,
     );
   }
 
@@ -150,13 +152,29 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
           padding: EdgeInsets.only(
             top: displayHeight * 0.02,
           ),
-          child: Column(
+          child: displayWidth < 600 ? Column(
             children: [
-              Chart(
-                recentExpenses: _registeredExpenses,
+              SizedBox(
+                height: displayHeight * 0.35,
+                child: Chart(
+                  recentExpenses: _registeredExpenses,
+                ),
               ),
               SizedBox(
                 height: displayHeight * 0.03,
+              ),
+              Expanded(
+                // width: 500,
+                // height: 500,
+                child: _registeredExpenses.isEmpty ? noContent : mainContent,
+              )
+            ],
+          ) : Row(
+            children: [
+              Expanded(
+                child: Chart(
+                  recentExpenses: _registeredExpenses,
+                ),
               ),
               Expanded(
                 // width: 500,
